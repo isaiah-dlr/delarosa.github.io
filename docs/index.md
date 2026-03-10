@@ -2,7 +2,7 @@
 
 Business analytics, operations, and data-focused projects.
 
-[Resume](#) | [LinkedIn](#) | [GitHub](#)
+[Resume](https://drive.google.com/file/d/1a9_Eev551AHZXxkjW1nMLXu4ZSK-Plpc/view?usp=sharing) | [LinkedIn](#) | [GitHub](#)
 
 ---
 
@@ -74,3 +74,4 @@ Studied appointment scheduling patterns and performance trends to support better
 - LinkedIn: [Your LinkedIn](#)
 - GitHub: [Your GitHub](#)
 - Email: yourname@email.com
+
