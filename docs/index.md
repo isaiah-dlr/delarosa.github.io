@@ -17,18 +17,20 @@ I am a Business Economics student with experience in analytics, operations, and 
 ### Feeding San Diego Cost Analysis
 **Tools:** Excel, Python, Tableau
 
-Analyzed cost, appointment, and operations data to identify inefficiencies and support program decision-making.
+Fluffy is an all-in-one assitant interface specifically for Feeding San Diego to analyze costs, distribution trends, and operational performance. It currently has three main tools, with additional features to follow:
 
-- Built structured analysis workflows for operational data
-- Evaluated cost drivers and service patterns
-- Created outputs that could be used for reporting and planning
+1. Ceres6 Query Tool 🔍
+A user-friendly interface for querying the Ceres6 database, allowing users to locate specific 2. Member Distribution Trend Calculator 📈
+A tool for visualizing and analyzing trends in member or regional distribution over time. You also have the option to download a copy of the report for further analysis.
+3. Fulfillment KPI Visualization Demo ⚙️
+A prototype data cleaning app, with various insight selectors for leadership to observe warehouse performance and set operational goals.
 
-[Project Writeup](#)  
-[GitHub Repo](#)
+[Project Writeup](https://fluffyapp-wg7pshcupfgrkbzmhqvwbi.streamlit.app/)  
+[GitHub Repo](https://github.com/FSD-BSAIntern/fluffyapp)
 
 ---
 
-### KPI Optimization App
+### Example Here
 **Tools:** Python, Streamlit, Pandas
 
 Developed an app that cleans raw fulfillment and logistics data and exports standardized KPI-ready outputs.
@@ -36,20 +38,6 @@ Developed an app that cleans raw fulfillment and logistics data and exports stan
 - Automated repetitive cleaning steps
 - Standardized inconsistent fields across files
 - Improved reporting usability for downstream dashboards
-
-[Project Writeup](#)  
-[GitHub Repo](#)
-
----
-
-### Marketplace Appointment Analysis
-**Tools:** Excel, Python, Data Visualization
-
-Studied appointment scheduling patterns and performance trends to support better capacity planning.
-
-- Reviewed appointment behavior over time
-- Identified possible scheduling bottlenecks
-- Summarized findings for operational use
 
 [Project Writeup](#)  
 [GitHub Repo](#)
@@ -70,10 +58,8 @@ Studied appointment scheduling patterns and performance trends to support better
 ---
 
 ## Contact
-
-- LinkedIn: [Your LinkedIn](#)
-- GitHub: [Your GitHub](#)
 - Email: yourname@email.com
+
 
 
 
