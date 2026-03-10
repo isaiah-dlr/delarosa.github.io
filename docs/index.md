@@ -20,7 +20,7 @@ I am a Business Economics student with experience in analytics, operations, and 
 Fluffy is an all-in-one assitant interface specifically for Feeding San Diego to analyze costs, distribution trends, and operational performance. It currently has three main tools, with additional features to follow:
 
 1. Ceres6 Query Tool 🔍
-A user-friendly interface for querying the Ceres6 database, allowing users to locate specific
+A user-friendly interface for querying the Ceres6 database, allowing users to locate specific information in reports about food distribution, member organizations, and more.
 2. Member Distribution Trend Calculator 📈
 A tool for visualizing and analyzing trends in member or regional distribution over time. You also have the option to download a copy of the report for further analysis.
 3. Fulfillment KPI Visualization Demo ⚙️
@@ -60,6 +60,7 @@ Developed an app that cleans raw fulfillment and logistics data and exports stan
 
 ## Contact
 - Email: yourname@email.com
+
 
 
 
