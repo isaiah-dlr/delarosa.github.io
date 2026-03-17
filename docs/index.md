@@ -5,6 +5,7 @@ Business analytics, operations, and data-focused projects.
 [Resume](https://drive.google.com/file/d/1a9_Eev551AHZXxkjW1nMLXu4ZSK-Plpc/view?usp=sharing) | [LinkedIn](https://www.linkedin.com/in/isaiahdlr/) | [GitHub](https://github.com/isaiah-dlr)
 
 ---
+![The San Juan Mountains are beautiful](/assets/images/IsaiahHeadshotFried.jpg "San Juan Mountains")
 
 ## About Me
 
