@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=max-width, initial-scale=1.0" />
+  <title>Isaiah De La Rosa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0c0f;
+      --bg-surface: #111418;
+      --bg-card: #161b22;
+      --bg-card-hover: #1c2330;
+      --border: #191f32;
+      --border-accent: #30363d;
+      --accent: #f59e0b;
+      --accent-dim: rgba(211, 155, 23, 0.801);
+      --accent-glow: rgba(247, 192, 27, 0.08);
+      --accent-glow-strong: rgba(237, 206, 30, 0.15);
+      --text-primary: #ecf0f4;
+      --text-secondary: #dadde0;
+      --text-muted: #92969b;
+      --mono: 'Space Mono', monospace;
+      --sans: 'DM Sans', sans-serif;
+      --tag-py: #1e3a5f;
+      --tag-py-text: #79c0ff;
+      --tag-xl: #1a3a1a;
+      --tag-xl-text: #7ee787;
+      --tag-sql: #3a1a3a;
+      --tag-sql-text: #d2a8ff;
+      --tag-tab: #3a2a00;
+      --tag-tab-text: #e3b341;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.75;
+      min-height: 100vh;
+    }
+
+    /* ── GRID LINES BACKGROUND ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.3;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      width: 85%;
+      margin: 10px auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1; 
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 12, 15, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 0;
+    }
+
+    nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+    }
+
+    .nav-logo span { color: var(--text-muted); }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 80px 0 64px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-layout {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 48px;
+    }
+
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .hero-photo {
+      flex-shrink: 0;
+      width: 300px;
+      height: 300px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--accent);
+      position: relative;
+    }
+
+    .hero-photo::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(74, 222, 128, 0.15);
+      mix-blend-mode: color;
+    }
+
+    .hero-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: grayscale(30%), contrast(1.1);
+    }
+
+    @media (max-width: 768px) {
+      .hero-layout { flex-direction: column-reverse; gap: 24px; }
+      .hero-photo { width: 140px; height: 140px; }
+    }
+
+    .hero-eyebrow {
+      font-family: var(--mono);
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    h1 {
+      font-family: var(--mono);
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+
+    h1 .dim { color: var(--text-muted); }
+
+    .hero-bio {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      max-width: 560px;
+      margin-bottom: 32px;
+      line-height: 1.75;
+    }
+
+    .hero-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 18px;
+      border-radius: 6px;
+      font-family: var(--mono);
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #0a0c0f;
+      font-weight: 600;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-dim);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid var(--border-accent);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+    /* ── SECTION HEADERS ── */
+    .section {
+      padding: 64px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .section-title {
+      font-family: var(--mono);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── PROJECT CARDS ── */
+    .projects-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .project-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 28px 32px;
+      transition: all 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--accent-dim);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .project-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-accent);
+      transform: translateX(4px);
+    }
+
+    .project-card:hover::before { opacity: 1; }
+
+    .project-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .project-org {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .project-title {
+      font-family: var(--mono);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .project-links {
+      display: flex;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .project-link {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      border: 1px solid var(--border-accent);
+      padding: 5px 12px;
+      border-radius: 4px;
+      transition: all 0.15s;
+      letter-spacing: 0.04em;
+    }
+
+    .project-link:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+    .project-link.disabled {
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    .project-desc {
+      color: var(--text-secondary);
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.75;
+      margin-bottom: 20px;
+    }
+
+    /* ── IMPACT METRICS ── */
+    .impact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .impact-stat {
+      background: var(--accent-glow);
+      border: 1px var(--accent-dim) solid;
+      border-radius: 6px;
+      padding: 8px 14px;
+      text-align: center;
+    }
+
+    .impact-number {
+      font-family: var(--mono);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent);
+      display: block;
+    }
+
+    .impact-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-top: 2px;
+    }
+
+    /* ── BULLETS ── */
+    .project-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+
+    .project-bullets li {
+      font-size: 15px;
+      color: var(--text-secondary);
+      padding-left: 18px;
+      position: relative;
+      line-height: 1.6;
+    }
+
+    .project-bullets li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-family: var(--mono);
+    }
+
+    /* ── TAGS ── */
+    .tag-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      letter-spacing: 0.04em;
+    }
+
+    .tag-python { background: var(--tag-py); color: var(--tag-py-text); }
+    .tag-excel  { background: var(--tag-xl); color: var(--tag-xl-text); }
+    .tag-sql    { background: var(--tag-sql); color: var(--tag-sql-text); }
+    .tag-tableau{ background: var(--tag-tab); color: var(--tag-tab-text); }
+    .tag-default{ background: #1c2330; color: #8b949e; border: 1px solid #30363d; }
+
+    /* ── SKILLS ── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 10px;
+    }
+
+    .skill-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s;
+    }
+
+    .skill-item:hover {
+      border-color: var(--accent-dim);
+      color: var(--text-primary);
+      background: var(--accent-glow);
+    }
+
+    .skill-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* ── CONTACT ── */
+    .contact-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px 18px;
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .contact-item:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 32px 0;
+      text-align: center;
+    }
+
+    footer p {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+    }
+
+    footer a { color: var(--accent-dim); text-decoration: none; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero > .container > * {
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .hero > .container > *:nth-child(1) { animation-delay: 0.05s; }
+    .hero > .container > *:nth-child(2) { animation-delay: 0.15s; }
+    .hero > .container > *:nth-child(3) { animation-delay: 0.25s; }
+    .hero > .container > *:nth-child(4) { animation-delay: 0.35s; }
+
+    @media (max-width: px) {
+      .project-card { padding: 20px; }
+      .nav-links { gap: 14px; }
+      h1 { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="container">
+      <a href="#" class="nav-logo"><span>~/</span>isaiah-dlr</a>
+      <ul class="nav-links">
+        <li><a href="#projects">projects</a></li>
+        <li><a href="#skills">skills</a></li>
+        <li><a href="#contact">contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="container">
+      <div class="hero-layout">
+        <div class="hero-left">
+          <p class="hero-eyebrow">Available for full-time roles · Class of 2026</p>
+          <h1>Isaiah<br><span class="dim">De La Rosa</span></h1>
+          <p class="hero-bio">
+            B.S. Economics student at UC San Diego building data tools, streamlining operations,
+            and turning messy workflows into usable insights. I thrive in work that intersects
+            business systems, analytics, and process improvement.
+          </p>
+          <div class="hero-links">
+            <a href="https://drive.google.com/file/d/1p2nn8wwjnH-y6qS8FsWSHdrz18xD5tnt/view?usp=sharing" target="_blank" class="btn btn-primary">Resume ↗</a>
+            <a href="https://www.linkedin.com/in/isaiahdlr/" target="_blank" class="btn btn-outline">LinkedIn</a>
+            <a href="https://github.com/isaiah-dlr" target="_blank" class="btn btn-outline">GitHub</a>
+          </div>
+        </div>
+        <div class="hero-photo">
+          <img src="assets/images/IsaiahHeadshotFried.jpg" alt="Isaiah De La Rosa" />
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- PROJECTS -->
+  <section class="section" id="projects">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">01</span>
+        <h2 class="section-title">projects</h2>
+        <div class="section-line"></div>
+      </div>
+
+      <div class="projects-grid">
+
+        <!-- PROJECT 1: Feeding San Diego -->
+        <div class="project-card">
+          <div class="project-header">
+            <div>
+              <p class="project-org">Feeding San Diego · Business Systems Analyst Intern</p>
+              <h3 class="project-title">Fluffy — Operational Analytics Platform</h3>
+            </div>
+            <div class="project-links">
+              <a href="https://fluffy-182913066082.us-west2.run.app/" target="_blank" class="project-link">Live App ↗</a>
+              <a href="https://github.com/isaiah-dlr/fluffy-2.0" target="_blank" class="project-link">GitHub ↗</a>
+            </div>
+          </div>
+
+          <p class="project-desc">
+            Fluffy is an all-in-one internal analytics platform I built and deployed for Feeding San Diego. 
+            The organization needed a way to surface distribution trends, fulfillment KPIs, and ad-hoc reporting 
+            without relying on manual exports — so I built it from scratch, deployed it to the cloud, and handed 
+            off a tool the team could actually use.
+          </p>
+
+          <div class="impact-grid">
+            <div class="impact-stat">
+              <span class="impact-number">3</span>
+              <span class="impact-label">integrated analytics tools</span>
+            </div>
+            <div class="impact-stat">
+              <span class="impact-number">P/P</span>
+              <span class="impact-label">period-over-period variance tracking</span>
+            </div>
+            <div class="impact-stat">
+              <span class="impact-number">NLP</span>
+              <span class="impact-label">natural language search engine</span>
+            </div>
+          </div>
+
+          <ul class="project-bullets">
+            <li>Deployed a Python web app on Google Cloud Run with KPI dashboards, automated reports, and user authentication</li>
+            <li>Engineered a pandas + Plotly pipeline to analyze order trends, fulfillment activity, and period-over-period variance</li>
+            <li>Built a natural language search tool with custom tokenization to retrieve distribution and reporting metrics</li>
+            <li>Modeled throughput, inventory cycle times, and efficiency to forecast capacity needs for warehouse expansion</li>
+          </ul>
+
+          <div class="tag-row">
+            <span class="tag tag-python">Python</span>
+            <span class="tag tag-default">Pandas</span>
+            <span class="tag tag-default">Plotly</span>
+            <span class="tag tag-default">Streamlit</span>
+            <span class="tag tag-default">Google Cloud Run</span>
+            <span class="tag tag-default">NLP</span>
+          </div>
+        </div>
+
+        <!-- PROJECT 2: Fraternity Budget Tool -->
+        <div class="project-card">
+          <div class="project-header">
+            <div>
+              <p class="project-org">Phi Delta Theta, California Kappa · President</p>
+              <h3 class="project-title">Chapter Budget & Financial Recovery Model</h3>
+            </div>
+            <div class="project-links">
+              <span class="project-link disabled">Excel File</span>
+            </div>
+          </div>
+
+          <p class="project-desc">
+            When I took office as Chapter Treasuer (and later Chapter President) I inherited a $5,000 deficit with no financial 
+            documentation or formal budgeting process. I built a structured Excel model to stabilize the chapter's 
+            finances, map a debt recovery path, and create a reusable framework for future treasurers.
+          </p>
+
+          <div class="impact-grid">
+            <div class="impact-stat">
+              <span class="impact-number">$5K+</span>
+              <span class="impact-label">deficit resolved in-term</span>
+            </div>
+            <div class="impact-stat">
+              <span class="impact-number">$23K</span>
+              <span class="impact-label">quarterly budget managed</span>
+            </div>
+            <div class="impact-stat">
+              <span class="impact-number">~40</span>
+              <span class="impact-label">members financially represented</span>
+            </div>
+          </div>
+
+          <ul class="project-bullets">
+            <li>Modeled a quarterly budget with built-in reimbursement workflows and variance tracking against actuals</li>
+            <li>Forecasted multi-quarter recovery path to resolve $5,000+ in inherited deficits while maintaining operations</li>
+            <li>Standardized reimbursement documentation to reduce treasurer onboarding time and processing errors</li>
+            <li>Built growth goal scenarios to guide chapter expansion planning and long-term financial stability</li>
+          </ul>
+
+          <div class="tag-row">
+            <span class="tag tag-excel">Excel</span>
+            <span class="tag tag-default">Financial Modeling</span>
+            <span class="tag tag-default">Forecasting</span>
+            <span class="tag tag-default">Budget Management</span>
+          </div>
+        </div>
+
+        <!-- PROJECT 3: Lumnus Project Prioritization -->
+        <div class="project-card">
+          <div class="project-header">
+            <div>
+              <p class="project-org">Lumnus Consulting · Operations Strategy Consultant</p>
+              <h3 class="project-title">Project Prioritization Decision Matrix</h3>
+            </div>
+            <div class="project-links">
+              <span class="project-link disabled">Excel File</span>
+            </div>
+          </div>
+
+          <p class="project-desc">
+            Lumnus is a student-run for-profit consulting group at UCSD. With limited consultant bandwidth 
+            and a growing project pipeline, the team needed a systematic way to evaluate which engagements 
+            to take on. My team built a weighted decision matrix that quantified tradeoffs across eight dimensions 
+            so leadership could make consistent, defensible capacity decisions.
+          </p>
+
+          <div class="impact-grid">
+            <div class="impact-stat">
+              <span class="impact-number">8</span>
+              <span class="impact-label">weighted scoring dimensions</span>
+            </div>
+            <div class="impact-stat">
+              <span class="impact-number">Org-wide</span>
+              <span class="impact-label">adopted as standard framework</span>
+            </div>
+          </div>
+
+          <ul class="project-bullets">
+            <li>Designed a multi-variable scoring matrix weighing client value, consultant growth, pay, effort, time, cost, complexity, and strategic fit</li>
+            <li>Built configurable weightings so leadership could adjust priorities based on organizational goals each semester</li>
+            <li>Implemented a feedback and analysis framework to capture post-project learnings and refine future scoring</li>
+            <li>Applied the model to a competitive landscape assessment for NanoMood's remote Ketamine monitoring platform</li>
+          </ul>
+
+          <div class="tag-row">
+            <span class="tag tag-excel">Excel</span>
+            <span class="tag tag-default">Decision Modeling</span>
+            <span class="tag tag-default">Operations Strategy</span>
+            <span class="tag tag-default">Consulting</span>
+          </div>
+        </div>
+
+        <!-- PROJECT 4: Hologic Supplier Database -->
+        <div class="project-card">
+          <div class="project-header">
+            <div>
+              <p class="project-org">Hologic · Procurement Supply Chain Intern</p>
+              <h3 class="project-title">Supplier-Item Database & Procurement Automation</h3>
+            </div>
+            <div class="project-links">
+              <span class="project-link disabled">Internal Tool</span>
+            </div>
+          </div>
+
+          <p class="project-desc">
+            Purchase order creation at Hologic was slow and error-prone due to fragmented supplier data 
+            across Oracle ERP, Agile PLM, and manual spreadsheets. I built a centralized supplier-item 
+            database linking materials, vendors, and catalog numbers to support automated MRP workflows 
+            and significantly cut PO creation time.
+          </p>
+
+          <div class="impact-grid">
+            <div class="impact-stat">
+              <span class="impact-number">1,500+</span>
+              <span class="impact-label">materials catalogued</span>
+            </div>
+            <div class="impact-stat">
+              <span class="impact-number">80%</span>
+              <span class="impact-label">reduction in PO creation time</span>
+            </div>
+            <div class="impact-stat">
+              <span class="impact-number">Oracle</span>
+              <span class="impact-label">ERP + Agile PLM integrated</span>
+            </div>
+          </div>
+
+          <ul class="project-bullets">
+            <li>Built supplier-item database linking 1,500+ materials, vendors, and catalog numbers across procurement systems</li>
+            <li>Validated Oracle Agile PLM master data for 1,500+ items against purchasing, compliance, and receiving requirements</li>
+            <li>Redesigned risk assessment Excel calculator to identify production risks and support supply continuity planning</li>
+            <li>Standardized buyer documentation to support automated MRP purchase order workflows</li>
+          </ul>
+
+          <div class="tag-row">
+            <span class="tag tag-excel">Excel</span>
+            <span class="tag tag-default">Oracle ERP</span>
+            <span class="tag tag-default">Agile PLM</span>
+            <span class="tag tag-default">Data Modeling</span>
+            <span class="tag tag-default">Supply Chain</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="section" id="skills">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">02</span>
+        <h2 class="section-title">skills</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-item"><span class="skill-dot"></span>Python</div>
+        <div class="skill-item"><span class="skill-dot"></span>Excel / Financial Modeling</div>
+        <div class="skill-item"><span class="skill-dot"></span>SQL</div>
+        <div class="skill-item"><span class="skill-dot"></span>Tableau</div>
+        <div class="skill-item"><span class="skill-dot"></span>R</div>
+        <div class="skill-item"><span class="skill-dot"></span>Pandas / Plotly</div>
+        <div class="skill-item"><span class="skill-dot"></span>Oracle ERP</div>
+        <div class="skill-item"><span class="skill-dot"></span>Jet Analytics</div>
+        <div class="skill-item"><span class="skill-dot"></span>Google Cloud Run</div>
+        <div class="skill-item"><span class="skill-dot"></span>Streamlit</div>
+        <div class="skill-item"><span class="skill-dot"></span>Tailwind CSS</div>
+        <div class="skill-item"><span class="skill-dot"></span>Supply Chain / Procurement</div>
+        <div class="skill-item"><span class="skill-dot"></span>Operations Strategy</div>
+        <div class="skill-item"><span class="skill-dot"></span>Project Management</div>
+        <div class="skill-item"><span class="skill-dot"></span>Public Speaking</div>
+        <div class="skill-item"><span class="skill-dot"></span>Spanish</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section" id="contact">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">03</span>
+        <h2 class="section-title">contact</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="contact-row">
+        <a href="mailto:isaiah.dlr406@gmail.com" class="contact-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          isaiah.dlr406@gmail.com
+        </a>
+        <a href="https://www.linkedin.com/in/isaiahdlr/" target="_blank" class="contact-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          LinkedIn ↗
+        </a>
+        <a href="https://github.com/isaiah-dlr" target="_blank" class="contact-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          GitHub ↗
+        </a>
+        <a href="tel:5594066726" class="contact-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.18 6.18l1.07-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          (559) 406-6726
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>Built by Isaiah De La Rosa · <a href="https://github.com/isaiah-dlr">isaiah-dlr</a> · UCSD Class of 2026 · 🙂</p>
+    </div>
+  </footer>
+
+</body>
+</html>
