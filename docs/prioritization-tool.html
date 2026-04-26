@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lumnus Project Prioritization Matrix</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0c0f;
+      --bg-surface: #111418;
+      --bg-card: #161b22;
+      --bg-card-hover: #1c2330;
+      --border: #191f32;
+      --border-accent: #30363d;
+      --accent: #f59e0b;
+      --accent-dim: rgba(211, 155, 23, 0.801);
+      --accent-glow: rgba(247, 192, 27, 0.08);
+      --accent-glow-strong: rgba(237, 206, 30, 0.15);
+      --text-primary: #ecf0f4;
+      --text-secondary: #dadde0;
+      --text-muted: #92969b;
+      --mono: 'Space Mono', monospace;
+      --sans: 'DM Sans', sans-serif;
+      --tag-py: #1e3a5f;
+      --tag-py-text: #79c0ff;
+      --tag-xl: #1a3a1a;
+      --tag-xl-text: #7ee787;
+      --tag-sql: #3a1a3a;
+      --tag-sql-text: #d2a8ff;
+      --tag-tab: #3a2a00;
+      --tag-tab-text: #e3b341;
+      --success: #4ade80;
+      --warning: #f59e0b;
+      --danger: #f87171;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.6;
+      padding: 32px 24px;
+      max-width: 75%;
+      margin: 0 auto;
+    }
+
+    .tool-header { margin-bottom: 28px; }
+    .tool-eyebrow {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tool-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 18px;
+      height: 1px;
+      background: var(--accent);
+    }
+    .tool-title {
+      font-family: var(--mono);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+    .tool-desc { font-size: 15px; color: var(--text-secondary); }
+
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 24px;
+    }
+    .tab {
+      padding: 10px 20px;
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: all 0.15s;
+      letter-spacing: 0.04em;
+    }
+    .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .tab:hover:not(.active) { color: var(--text-secondary); }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .sec-label {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--text-secondary);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .sec-label span {
+      font-family: var(--sans);
+      font-size: 13px;
+      color: var(--text-secondary);
+      text-transform: none;
+      letter-spacing: 0;
+      font-weight: 400;
+    }
+
+    .fgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+    .fgrid.full { grid-template-columns: 1fr; }
+
+    .field {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+    .field label {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 15px;
+      color: var(--text-secondary);
+      margin-bottom: 7px;
+      font-weight: 500;
+    }
+    .field label .wt {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 400;
+      font-family: var(--mono);
+    }
+    .field select,
+    .field input[type=number] {
+      width: 100%;
+      font-size: 15px;
+      background: var(--bg);
+      color: var(--text-primary);
+      border: 1px solid var(--border-accent);
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-family: var(--sans);
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .field select:focus,
+    .field input:focus {
+      outline: none;
+      border-color: var(--accent-dim);
+    }
+
+    .divider { height: 1px; background: var(--border); margin: 16px 0; }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .skill-check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      padding: 7px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      transition: all 0.15s;
+      background: var(--bg-card);
+      user-select: none;
+    }
+    .skill-check:hover { border-color: var(--border-accent); color: var(--text-primary); }
+    .skill-check.checked { border-color: var(--accent-dim); color: var(--text-primary); background: var(--accent-glow); }
+    .skill-check input { display: none; }
+    .dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border-accent);
+      flex-shrink: 0;
+      transition: all 0.15s;
+    }
+    .skill-check.checked .dot { background: var(--accent); border-color: var(--accent); }
+
+    .next-btn {
+      width: 100%;
+      padding: 11px;
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      border-radius: 8px;
+      border: 1px solid var(--border-accent);
+      background: transparent;
+      color: var(--text-secondary);
+      transition: all 0.2s;
+      margin-top: 6px;
+    }
+    .next-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+    /* Results */
+    .trio {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .scard {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 12px;
+      text-align: center;
+    }
+    .scard.ratio-card { border-color: var(--accent-dim); background: var(--accent-glow); }
+    .scard .slabel {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+    .scard .snum {
+      font-family: var(--mono);
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+    .scard.ratio-card .snum { color: var(--accent); }
+    .scard .ssub { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+    .verdict {
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      margin-bottom: 20px;
+    }
+    .v-take { background: rgba(74,222,128,0.15); color: var(--success); border: 1px solid rgba(74,222,128,0.3); }
+    .v-review { background: rgba(245,158,11,0.12); color: var(--warning); border: 1px solid rgba(245,158,11,0.3); }
+    .v-pass { background: rgba(248,113,113,0.12); color: var(--danger); border: 1px solid rgba(248,113,113,0.3); }
+
+    .breakdown-label {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .bar-lbl { font-size: 12px; color: var(--text-secondary); width: 140px; flex-shrink: 0; }
+    .bar-track { flex: 1; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 2px; transition: width 0.45s ease; }
+    .bf-i { background: var(--success); }
+    .bf-c { background: var(--danger); }
+    .bar-val { font-family: var(--mono); font-size: 11px; color: var(--text-muted); width: 38px; text-align: right; }
+    .bar-section-gap { height: 12px; }
+
+    .formula-note {
+      font-size: 14px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+      margin-top: 12px;
+      line-height: 1.7;
+      font-family: var(--mono);
+    }
+    .reset {
+      font-size: 13px;
+      color: var(--text-muted);
+      cursor: pointer;
+      text-decoration: underline;
+      margin-top: 14px;
+      display: inline-block;
+      font-family: var(--mono);
+    }
+    .reset:hover { color: var(--text-secondary); }
+
+    @media (max-width: 520px) {
+      .fgrid { grid-template-columns: 1fr; }
+      .skills-grid { grid-template-columns: 1fr; }
+      .trio { grid-template-columns: 1fr; }
+      .tab { padding: 10px 12px; font-size: 11px; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="index.html" style="
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text-muted);
+  text-decoration: none;
+  letter-spacing: 0.06em;
+  margin-bottom: 28px;
+  transition: color 0.15s;
+" onmouseover="this.style.color='var(--accent)'"
+   onmouseout="this.style.color='var(--text-muted)'">
+  ← back to portfolio
+</a>
+
+  <div class="tool-header">
+    <p class="tool-eyebrow">Lumnus Consulting · UCSD</p>
+    <h1 class="tool-title">Project Prioritization Matrix</h1>
+    <p class="tool-desc">Score projects across impact and cost/effort to surface the highest-value engagements when consultant capacity is limited.</p>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="goTab(0)">01 — Impact</div>
+    <div class="tab" onclick="goTab(1)">02 — Cost / Effort</div>
+    <div class="tab" onclick="goTab(2)">03 — Results</div>
+  </div>
+
+  <!-- PANEL 0: IMPACT -->
+  <div class="panel active" id="p0">
+    <div class="sec-label">Impact inputs <span>· weights sum to 1.0</span></div>
+
+    <div class="fgrid">
+      <div class="field">
+        <label>Client value <span class="wt">w = 0.30</span></label>
+        <select id="clientval">
+          <option value="0.25">Low — minor to their strategy</option>
+          <option value="0.5">Medium — notable impact</option>
+          <option value="0.75" selected>High — significantly impacts ops</option>
+          <option value="1.0">Critical — central to objectives</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Visibility / brand impact <span class="wt">w = 0.20</span></label>
+        <select id="visibility">
+          <option value="0.25">None — internal only</option>
+          <option value="0.5" selected>Some — limited exposure</option>
+          <option value="0.75">Significant — public-facing results</option>
+          <option value="1.0">High-profile — media / endorsements</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="fgrid">
+      <div class="field">
+        <label>Expected revenue ($) <span class="wt">w = 0.05</span></label>
+        <input type="number" id="revenue" placeholder="e.g. 4000" min="0" value="4000" />
+      </div>
+      <div class="field">
+        <label>Service alignment <span class="wt">w = 0.15</span></label>
+        <select id="alignment">
+          <option value="0.25">Weak — outside core services</option>
+          <option value="0.5">Partial — some overlap</option>
+          <option value="0.75" selected>Strong — fits our service model</option>
+          <option value="1.0">Perfect — core Lumnus offering</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="sec-label">Consultant growth <span>· skill areas engaged · w = 0.30 · select all that apply</span></div>
+
+    <div class="skills-grid" id="skills-grid">
+      <label class="skill-check" onclick="toggleSkill(this)"><input type="checkbox"><span class="dot"></span>Strategy &amp; business</label>
+      <label class="skill-check" onclick="toggleSkill(this)"><input type="checkbox"><span class="dot"></span>Data analysis &amp; visualization</label>
+      <label class="skill-check" onclick="toggleSkill(this)"><input type="checkbox"><span class="dot"></span>Research &amp; industry knowledge</label>
+      <label class="skill-check" onclick="toggleSkill(this)"><input type="checkbox"><span class="dot"></span>Coding &amp; technical analytics</label>
+      <label class="skill-check" onclick="toggleSkill(this)"><input type="checkbox"><span class="dot"></span>Client relations &amp; communications</label>
+      <label class="skill-check" onclick="toggleSkill(this)"><input type="checkbox"><span class="dot"></span>Project management</label>
+      <label class="skill-check" onclick="toggleSkill(this)"><input type="checkbox"><span class="dot"></span>Digital transformation / AI</label>
+      <label class="skill-check" onclick="toggleSkill(this)"><input type="checkbox"><span class="dot"></span>Specialized domain knowledge</label>
+    </div>
+
+    <button class="next-btn" onclick="goTab(1)">Next: Cost / Effort →</button>
+  </div>
+
+  <!-- PANEL 1: COST/EFFORT -->
+  <div class="panel" id="p1">
+    <div class="sec-label">Cost / effort inputs <span>· weights sum to 1.0</span></div>
+
+    <div class="fgrid">
+      <div class="field">
+        <label>Consultants needed <span class="wt">w = 0.35 (manpower)</span></label>
+        <input type="number" id="consultants" placeholder="e.g. 3" min="1" max="30" value="3" />
+      </div>
+      <div class="field">
+        <label>Experience level required <span class="wt">manpower sub-input</span></label>
+        <select id="experience">
+          <option value="0.25">Low — generalist skills sufficient</option>
+          <option value="0.5" selected>Medium — some specialist needed</option>
+          <option value="0.75">High — significant senior input</option>
+          <option value="1.0">Critical — rare expertise required</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="fgrid full">
+      <div class="field">
+        <label>Project duration (weeks) <span class="wt">w = 0.35 (time)</span></label>
+        <input type="number" id="weeks" placeholder="e.g. 6" min="1" max="52" value="6" />
+      </div>
+    </div>
+
+    <div class="fgrid">
+      <div class="field">
+        <label>Technical complexity <span class="wt">w = 0.30 (complexity sub)</span></label>
+        <select id="techcomplex">
+          <option value="0.25">Low — straightforward deliverables</option>
+          <option value="0.5" selected>Medium — some specialized work</option>
+          <option value="0.75">High — multi-system or analytical</option>
+          <option value="1.0">Very high — novel or cutting-edge</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Project definition &amp; clarity <span class="wt">complexity sub</span></label>
+        <select id="clarity">
+          <option value="1.0">Well-defined — milestones, scope &amp; goals clear</option>
+          <option value="0.67" selected>Partial — some ambiguity remains</option>
+          <option value="0.33">Vague — scope likely to shift</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="next-btn" onclick="calcAndShow()">Calculate scores →</button>
+  </div>
+
+  <!-- PANEL 2: RESULTS -->
+  <div class="panel" id="p2">
+    <div class="trio">
+      <div class="scard">
+        <div class="slabel">Impact score</div>
+        <div class="snum" id="r-impact">—</div>
+        <div class="ssub">out of 1.00</div>
+      </div>
+      <div class="scard">
+        <div class="slabel">Cost / effort score</div>
+        <div class="snum" id="r-cost">—</div>
+        <div class="ssub">out of 1.00</div>
+      </div>
+      <div class="scard ratio-card">
+        <div class="slabel">Impact ÷ cost ratio</div>
+        <div class="snum" id="r-ratio">—</div>
+        <div class="ssub">higher = better</div>
+      </div>
+    </div>
+
+    <div id="verdict-wrap"></div>
+
+    <div class="breakdown-label">Score breakdown</div>
+
+    <div class="bar-row"><span class="bar-lbl">Client value</span><div class="bar-track"><div class="bar-fill bf-i" id="b-client"></div></div><span class="bar-val" id="v-client"></span></div>
+    <div class="bar-row"><span class="bar-lbl">Consultant growth</span><div class="bar-track"><div class="bar-fill bf-i" id="b-growth"></div></div><span class="bar-val" id="v-growth"></span></div>
+    <div class="bar-row"><span class="bar-lbl">Visibility</span><div class="bar-track"><div class="bar-fill bf-i" id="b-vis"></div></div><span class="bar-val" id="v-vis"></span></div>
+    <div class="bar-row"><span class="bar-lbl">Pay / revenue</span><div class="bar-track"><div class="bar-fill bf-i" id="b-pay"></div></div><span class="bar-val" id="v-pay"></span></div>
+    <div class="bar-row"><span class="bar-lbl">Service alignment</span><div class="bar-track"><div class="bar-fill bf-i" id="b-align"></div></div><span class="bar-val" id="v-align"></span></div>
+    <div class="bar-section-gap"></div>
+    <div class="bar-row"><span class="bar-lbl">Manpower</span><div class="bar-track"><div class="bar-fill bf-c" id="b-man"></div></div><span class="bar-val" id="v-man"></span></div>
+    <div class="bar-row"><span class="bar-lbl">Time</span><div class="bar-track"><div class="bar-fill bf-c" id="b-time"></div></div><span class="bar-val" id="v-time"></span></div>
+    <div class="bar-row"><span class="bar-lbl">Complexity</span><div class="bar-track"><div class="bar-fill bf-c" id="b-comp"></div></div><span class="bar-val" id="v-comp"></span></div>
+
+    <div class="formula-note">
+      impact = (client×0.30) + (growth×0.30) + (visibility×0.20) + (revenue×0.05) + (alignment×0.15)<br>
+      cost   = (manpower×0.35) + (time×0.35) + (complexity×0.30)<br>
+      ratio  = impact ÷ cost · revenue normalized to $4K ceiling · time normalized to 16-week ceiling
+    </div>
+    <span class="reset" onclick="goTab(0)">← start over</span>
+  </div>
+
+  <script>
+    function goTab(i) {
+      document.querySelectorAll('.tab').forEach((t,j) => t.classList.toggle('active', i===j));
+      document.querySelectorAll('.panel').forEach((p,j) => p.classList.toggle('active', i===j));
+    }
+
+    function toggleSkill(el) {
+      el.classList.toggle('checked');
+      el.querySelector('input').checked = el.classList.contains('checked');
+    }
+
+    function setBar(fillId, valId, pct) {
+      document.getElementById(fillId).style.width = pct + '%';
+      document.getElementById(valId).textContent = (pct / 100).toFixed(2);
+    }
+
+    function calcAndShow() {
+      const clientVal    = parseFloat(document.getElementById('clientval').value);
+      const visibility   = parseFloat(document.getElementById('visibility').value);
+      const alignment    = parseFloat(document.getElementById('alignment').value);
+      const rawRevenue   = Math.max(0, parseFloat(document.getElementById('revenue').value) || 0);
+      const revenueScore = Math.min(rawRevenue / 4000, 1.0);
+
+      const checked     = document.querySelectorAll('#skills-grid .skill-check.checked').length;
+      const growthScore = Math.min(checked / 5, 1.0);
+
+      const impact =
+        clientVal    * 0.30 +
+        growthScore  * 0.30 +
+        visibility   * 0.20 +
+        revenueScore * 0.05 +
+        alignment    * 0.15;
+
+      const consultants   = Math.max(1, parseInt(document.getElementById('consultants').value) || 1);
+      const experience    = parseFloat(document.getElementById('experience').value);
+      const weeks         = Math.max(1, parseInt(document.getElementById('weeks').value) || 1);
+      const techcomplex   = parseFloat(document.getElementById('techcomplex').value);
+      const clarity       = parseFloat(document.getElementById('clarity').value);
+
+      const manpowerScore = Math.min((consultants / 10) * 0.5 + experience * 0.5, 1.0);
+      const timeScore     = Math.min(weeks / 16, 1.0);
+      const complexScore  = (techcomplex + (1 - clarity)) / 2;
+
+      const cost =
+        manpowerScore * 0.35 +
+        timeScore     * 0.35 +
+        complexScore  * 0.30;
+
+      const ratio = cost > 0 ? impact / cost : 0;
+
+      document.getElementById('r-impact').textContent = impact.toFixed(3);
+      document.getElementById('r-cost').textContent   = cost.toFixed(3);
+      document.getElementById('r-ratio').textContent  = ratio.toFixed(2);
+
+      const vw = document.getElementById('verdict-wrap');
+      let cls, txt;
+      if (ratio >= 1.4)      { cls = 'v-take';   txt = 'Strong candidate — take the project'; }
+      else if (ratio >= 0.9) { cls = 'v-review'; txt = 'Review carefully — moderate return on effort'; }
+      else                   { cls = 'v-pass';   txt = 'Pass — cost outweighs projected impact'; }
+      vw.innerHTML = `<span class="verdict ${cls}">${txt}</span>`;
+
+      setBar('b-client', 'v-client', clientVal    * 100);
+      setBar('b-growth', 'v-growth', growthScore  * 100);
+      setBar('b-vis',    'v-vis',    visibility   * 100);
+      setBar('b-pay',    'v-pay',    revenueScore * 100);
+      setBar('b-align',  'v-align',  alignment    * 100);
+      setBar('b-man',    'v-man',    manpowerScore* 100);
+      setBar('b-time',   'v-time',   timeScore    * 100);
+      setBar('b-comp',   'v-comp',   complexScore * 100);
+
+      goTab(2);
+    }
+  </script>
+
+</body>
+</html>
