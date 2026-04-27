@@ -83,16 +83,55 @@
     <div class="sec-label">Consultant growth <span>· skill areas engaged · w = 0.30 · select all that apply</span></div>
 
     <div class="skills-grid" id="skills-grid">
-      <label class="skill-check" onclick="toggleSkill(this)"><input type="checkbox"><span class="dot"></span>Strategy &amp; business</label>
-      <label class="skill-check" onclick="toggleSkill(this)"><input type="checkbox"><span class="dot"></span>Data analysis &amp; visualization</label>
-      <label class="skill-check" onclick="toggleSkill(this)"><input type="checkbox"><span class="dot"></span>Research &amp; industry knowledge</label>
-      <label class="skill-check" onclick="toggleSkill(this)"><input type="checkbox"><span class="dot"></span>Coding &amp; technical analytics</label>
-      <label class="skill-check" onclick="toggleSkill(this)"><input type="checkbox"><span class="dot"></span>Client relations &amp; communications</label>
-      <label class="skill-check" onclick="toggleSkill(this)"><input type="checkbox"><span class="dot"></span>Project management</label>
-      <label class="skill-check" onclick="toggleSkill(this)"><input type="checkbox"><span class="dot"></span>Digital transformation / AI</label>
-      <label class="skill-check" onclick="toggleSkill(this)"><input type="checkbox"><span class="dot"></span>Specialized domain knowledge</label>
-    </div>
+    <label class="skill-check">
+      <input type="checkbox">
+      <span class="dot"></span>
+      Strategy &amp; business
+    </label>
 
+    <label class="skill-check">
+      <input type="checkbox">
+      <span class="dot"></span>
+      Data analysis &amp; visualization
+    </label>
+
+    <label class="skill-check">
+      <input type="checkbox">
+      <span class="dot"></span>
+      Research &amp; industry knowledge
+    </label>
+
+    <label class="skill-check">
+      <input type="checkbox">
+      <span class="dot"></span>
+      Coding &amp; technical analytics
+    </label>
+
+    <label class="skill-check">
+      <input type="checkbox">
+      <span class="dot"></span>
+      Client relations &amp; communications
+    </label>
+
+    <label class="skill-check">
+      <input type="checkbox">
+      <span class="dot"></span>
+      Project management
+    </label>
+
+    <label class="skill-check">
+      <input type="checkbox">
+      <span class="dot"></span>
+      Digital transformation / AI
+    </label>
+
+    <label class="skill-check">
+      <input type="checkbox">
+      <span class="dot"></span>
+      Specialized domain knowledge
+    </label>
+    </div>
+      
     <button class="next-btn" onclick="goTab(1)">Next: Cost / Effort →</button>
   </div>
 
@@ -211,8 +250,8 @@
       const rawRevenue   = Math.max(0, parseFloat(document.getElementById('revenue').value) || 0);
       const revenueScore = Math.min(rawRevenue / 4000, 1.0);
 
-      const checked     = document.querySelectorAll('#skills-grid .skill-check.checked').length;
-      const growthScore = Math.min(checked / 5, 1.0);
+      const checked     = document.querySelectorAll('#skills-grid .skill-check:has(input:checked)').length;
+      const growthScore = Math.min(checked / 6, 1.0);
 
       const impact =
         clientVal    * 0.30 +

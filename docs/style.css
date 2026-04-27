@@ -699,6 +699,20 @@ footer a { color: var(--accent-dim); text-decoration: none; }
     background: var(--bg-card);
     user-select: none;
 }
+
+.skill-check input {
+  display: none;
+}
+
+.skill-check:has(input:checked) {
+  background: var(--accent-glow);
+  border-color: var(--accent);
+}
+
+.skill-check:has(input:checked) .dot {
+  background: var(--accent);
+}
+
 .skill-check:hover { border-color: var(--border-accent); color: var(--text-primary); }
 .skill-check.checked { border-color: var(--accent-dim); color: var(--text-primary); background: var(--accent-glow); }
 .skill-check input { display: none; }
